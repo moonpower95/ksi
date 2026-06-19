@@ -1,0 +1,919 @@
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>김세일의 미니홈피 🐾</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gaegu:wght=400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+        
+        .font-handwritten {
+            font-family: 'Gaegu', cursive, sans-serif;
+        }
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #fdfbf7;
+        }
+        /* 하트/별 둥둥 떠다니는 애니메이션 */
+        @keyframes float-up {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) scale(1.4);
+                opacity: 0;
+            }
+        }
+        .bubble-effect {
+            position: absolute;
+            animation: float-up 1s ease-out forwards;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- 상단 내비게이션 바 -->
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-amber-100 px-4 py-3">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <a href="#" class="flex items-center gap-2 text-2xl font-bold text-amber-600 font-handwritten">
+                <i data-lucide="dog" class="w-7 h-7 text-amber-500"></i>
+                <span id="nav-dog-name">김세일</span>의 미니홈피
+            </a>
+            <div class="flex gap-4 text-sm font-medium text-slate-600">
+                <a href="#profile-section" class="hover:text-amber-500 transition">프로필</a>
+                <a href="#gallery-section" class="hover:text-amber-500 transition font-semibold text-amber-600">포토갤러리</a>
+                <a href="#play-section" class="hover:text-amber-500 transition">놀아주기</a>
+                <a href="#walk-section" class="hover:text-amber-500 transition">산책기록</a>
+                <a href="#guestbook-section" class="hover:text-amber-500 transition">방명록</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-4 py-8 space-y-12">
+
+        <!-- 프로필 & 메인 헤더 섹션 -->
+        <section id="profile-section" class="bg-white rounded-3xl p-6 md:p-8 shadow-xl shadow-amber-100 border border-amber-50 relative overflow-hidden">
+            <!-- 배경 귀여운 발자국 장식 -->
+            <div class="absolute -right-10 -bottom-10 text-amber-50 opacity-10 pointer-events-none">
+                <i data-lucide="paw-print" class="w-48 h-48"></i>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 items-center relative z-10">
+                <!-- 프로필 이미지 영역 -->
+                <div class="relative group">
+                    <div class="w-48 h-48 rounded-full overflow-hidden border-4 border-amber-400 shadow-md bg-amber-50 flex items-center justify-center relative">
+                        <!-- 코카스파니엘 메인 이미지로 변경 -->
+                        <img id="dog-img" src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?auto=format&fit=crop&q=80&w=400" alt="코카스파니엘 김세일 프로필 사진" class="w-full h-full object-cover">
+                        <!-- 이미지 업로드 오버레이 -->
+                        <label for="img-uploader" class="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white opacity-0 group-hover:opacity-100 transition cursor-pointer text-xs font-semibold">
+                            <i data-lucide="camera" class="w-6 h-6 mb-1"></i>
+                            사진 변경하기
+                        </label>
+                        <input type="file" id="img-uploader" accept="image/*" class="hidden">
+                    </div>
+                    <!-- 상태 표시 데코 -->
+                    <span class="absolute bottom-2 right-2 bg-green-500 text-white text-xs px-2.5 py-1 rounded-full font-bold shadow-md flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-white animate-ping"></span> 신남 🐾
+                    </span>
+                </div>
+
+                <!-- 상세 정보 -->
+                <div class="flex-1 space-y-4 text-center md:text-left w-full">
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-3">
+                        <h1 id="display-name" class="text-3xl md:text-4xl font-extrabold text-slate-800 font-handwritten">김세일</h1>
+                        <span id="display-breed" class="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-1 rounded-full">코카스파니엘</span>
+                        <button id="btn-edit-profile" class="text-xs text-slate-400 hover:text-amber-500 flex items-center gap-1 transition ml-2">
+                            <i data-lucide="edit-3" class="w-3.5 h-3.5"></i> 수정
+                        </button>
+                    </div>
+
+                    <!-- 소개말 -->
+                    <p id="display-bio" class="text-slate-600 italic">"펄럭이는 귀가 너무 매력적인 우리 집 마스코트, 코카스파니엘 김세일입니다!"</p>
+
+                    <!-- 그리드 상세 프로필 -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
+                        <div class="bg-amber-50/50 p-3 rounded-2xl border border-amber-100/50">
+                            <span class="text-xs text-slate-400 block mb-0.5">생년월일</span>
+                            <span id="display-birth" class="font-semibold text-sm">2022-03-10</span>
+                        </div>
+                        <div class="bg-amber-50/50 p-3 rounded-2xl border border-amber-100/50">
+                            <span class="text-xs text-slate-400 block mb-0.5">계산된 나이</span>
+                            <span id="display-age" class="font-semibold text-sm">계산 중...</span>
+                        </div>
+                        <div class="bg-amber-50/50 p-3 rounded-2xl border border-amber-100/50 col-span-2 sm:col-span-1">
+                            <span class="text-xs text-slate-400 block mb-0.5">최애 관심사</span>
+                            <span id="display-favorites" class="font-semibold text-sm">원반 던지기, 신발 훔치기</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 프로필 편집 모달 (숨김 상태) -->
+            <div id="profile-edit-form" class="hidden mt-8 p-6 bg-amber-50/70 rounded-2xl border border-amber-200 space-y-4">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <i data-lucide="settings" class="w-5 h-5 text-amber-500"></i> 프로필 정보 수정
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">이름</label>
+                        <input type="text" id="input-name" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white" placeholder="이름을 입력하세요">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">견종</label>
+                        <input type="text" id="input-breed" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white" placeholder="견종을 입력하세요">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">생년월일</label>
+                        <input type="date" id="input-birth" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">좋아하는 것들</label>
+                        <input type="text" id="input-favorites" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white" placeholder="쉼표(,)로 구분해 주세요">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">소개 한마디</label>
+                        <textarea id="input-bio" rows="2" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white" placeholder="강아지의 매력을 한 줄로 소개해주세요!"></textarea>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button id="btn-cancel-profile" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 rounded-xl text-sm font-semibold transition">취소</button>
+                    <button id="btn-save-profile" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-semibold shadow-md transition">저장하기</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 포토 갤러리 섹션 -->
+        <section id="gallery-section" class="bg-white rounded-3xl p-6 md:p-8 shadow-xl shadow-amber-100 border border-amber-50">
+            <div class="space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div class="space-y-1">
+                        <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-2 font-handwritten text-amber-600 text-3xl">
+                            <i data-lucide="image" class="w-7 h-7 text-amber-500"></i> <span class="dog-name-dynamic">김세일</span> 일상 갤러리
+                        </h2>
+                        <p class="text-xs text-slate-400">세일이의 사랑스러운 순간들을 올리고 함께 감상하세요!</p>
+                    </div>
+                    <!-- 사진 등록 버튼 -->
+                    <label for="gallery-uploader" class="cursor-pointer bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm px-4 py-2.5 rounded-2xl shadow-lg shadow-amber-100 flex items-center gap-2 transition transform active:scale-95">
+                        <i data-lucide="plus" class="w-4 h-4"></i> 사진 추가하기
+                    </label>
+                    <input type="file" id="gallery-uploader" accept="image/*" class="hidden">
+                </div>
+
+                <!-- 이미지 갤러리 그리드 -->
+                <div id="gallery-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                    <!-- 기본 세일이 사진 목록 (동적 주입 및 기본값 제공) -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 놀아주기 (미니 상호작용) 섹션 -->
+        <section id="play-section" class="bg-white rounded-3xl p-6 md:p-8 shadow-xl shadow-amber-100 border border-amber-50">
+            <div class="text-center max-w-lg mx-auto space-y-6">
+                <div class="space-y-1">
+                    <h2 class="text-2xl font-bold font-handwritten text-amber-600">지금 <span class="dog-name-dynamic">김세일</span>이랑 놀아주기!</h2>
+                    <p class="text-sm text-slate-500">간식을 주거나 쓰다듬어주며 교감 게이지를 채워주세요.</p>
+                </div>
+
+                <!-- 강아지 인터랙티브 그래픽 영역 -->
+                <div id="interactive-dog-area" class="relative w-48 h-48 mx-auto flex items-center justify-center cursor-pointer select-none">
+                    <!-- 신나는 애니메이션이 걸린 강아지 SVG 캐릭터 -->
+                    <svg id="dog-character-svg" class="w-full h-full transform transition duration-300 hover:scale-105 active:scale-95" viewBox="0 0 200 200">
+                        <!-- 배경 그늘 -->
+                        <ellipse cx="100" cy="170" rx="60" ry="15" fill="#f1f5f9" />
+                        
+                        <g id="dog-body" class="transition-transform duration-300">
+                            <!-- 귀 (왼쪽) -->
+                            <path id="left-ear" d="M 50,70 Q 30,70 35,110 Q 55,110 55,80 Z" fill="#b45309" class="origin-top transition-transform" />
+                            <!-- 귀 (오른쪽) -->
+                            <path id="right-ear" d="M 150,70 Q 170,70 165,110 Q 145,110 145,80 Z" fill="#b45309" class="origin-top transition-transform" />
+                            
+                            <!-- 얼굴 원형 -->
+                            <circle cx="100" cy="100" r="55" fill="#d97706" />
+                            
+                            <!-- 주둥이 및 볼 -->
+                            <ellipse cx="100" cy="115" rx="30" ry="20" fill="#fef3c7" />
+                            
+                            <!-- 눈 (왼쪽) -->
+                            <circle id="left-eye" cx="78" cy="95" r="7" fill="#1e293b" />
+                            <circle cx="76" cy="93" r="2.5" fill="#ffffff" />
+                            
+                            <!-- 눈 (오른쪽) -->
+                            <circle id="right-eye" cx="122" cy="95" r="7" fill="#1e293b" />
+                            <circle cx="120" cy="93" r="2.5" fill="#ffffff" />
+                            
+                            <!-- 코 -->
+                            <polygon points="92,105 108,105 100,113" fill="#1e293b" />
+                            
+                            <!-- 미소/입 -->
+                            <path id="dog-mouth" d="M 90,117 Q 100,123 110,117" stroke="#1e293b" stroke-width="3" fill="none" stroke-linecap="round" />
+                            
+                            <!-- 귀여운 혀 -->
+                            <path id="dog-tongue" d="M 95,120 Q 100,135 105,120 Z" fill="#ef4444" class="scale-y-0 transition-transform origin-top" />
+                            
+                            <!-- 볼터치 -->
+                            <circle cx="60" cy="108" r="7" fill="#f87171" opacity="0.6" />
+                            <circle cx="140" cy="108" r="7" fill="#f87171" opacity="0.6" />
+                        </g>
+                    </svg>
+                </div>
+
+                <!-- 스태터스 바 -->
+                <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold text-slate-500 mb-1">
+                            <span>배부름 게이지 🍖</span>
+                            <span id="hunger-pct">50%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+                            <div id="hunger-bar" class="bg-amber-500 h-full transition-all duration-300" style="width: 50%;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold text-slate-500 mb-1">
+                            <span>행복 게이지 💖</span>
+                            <span id="happy-pct">60%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+                            <div id="happy-bar" class="bg-rose-400 h-full transition-all duration-300" style="width: 60%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 액션 버튼들 -->
+                <div class="flex justify-center gap-3">
+                    <button id="btn-feed" class="flex-1 py-3 px-4 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-2xl shadow-lg shadow-amber-100 flex items-center justify-center gap-2 transition transform active:scale-95">
+                        <i data-lucide="cookie" class="w-5 h-5"></i> 고구마 주기
+                    </button>
+                    <button id="btn-pet" class="flex-1 py-3 px-4 bg-rose-400 hover:bg-rose-500 text-white font-semibold rounded-2xl shadow-lg shadow-rose-100 flex items-center justify-center gap-2 transition transform active:scale-95">
+                        <i data-lucide="sparkles" class="w-5 h-5"></i> 쓰다듬기
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 산책 트래커 섹션 -->
+        <section id="walk-section" class="bg-white rounded-3xl p-6 md:p-8 shadow-xl shadow-amber-100 border border-amber-50">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- 일지 등록 폼 -->
+                <div class="md:col-span-1 space-y-4">
+                    <div class="space-y-1">
+                        <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <i data-lucide="navigation" class="text-emerald-500"></i> 산책 일지 기록
+                        </h2>
+                        <p class="text-xs text-slate-400">오늘 다녀온 행복한 산책길을 남겨보세요.</p>
+                    </div>
+
+                    <form id="walk-form" class="space-y-3 bg-emerald-50/20 p-4 rounded-2xl border border-emerald-100/30">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">산책 날짜</label>
+                            <input type="date" id="walk-date" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-400 focus:outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">산책 시간 (분)</label>
+                            <input type="number" id="walk-duration" min="1" placeholder="예: 30" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-400 focus:outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">산책 코스 / 짧은 일기</label>
+                            <textarea id="walk-notes" rows="3" placeholder="동네 한 바퀴 시원하게 돌고 킁킁이도 잔뜩 했어요!" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-400 focus:outline-none" required></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-semibold rounded-xl shadow-md transition flex items-center justify-center gap-1">
+                            <i data-lucide="plus-circle" class="w-4 h-4"></i> 기록 추가하기
+                        </button>
+                    </form>
+                </div>
+
+                <!-- 오늘/이번주 통계 & 목록 -->
+                <div class="md:col-span-2 space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                            <i data-lucide="calendar" class="text-emerald-500"></i> 최근 산책 기록
+                        </h3>
+                        <span id="total-walk-stats" class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">
+                            총 0회 산책 완료
+                        </span>
+                    </div>
+
+                    <!-- 산책 내역 리스트 -->
+                    <div id="walk-list-container" class="space-y-3 max-h-[350px] overflow-y-auto pr-1">
+                        <div class="text-center py-12 text-slate-400">
+                            <i data-lucide="footprints" class="w-12 h-12 mx-auto opacity-30 mb-2"></i>
+                            <p class="text-sm">아직 등록된 산책 기록이 없어요.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 방명록 섹션 -->
+        <section id="guestbook-section" class="bg-white rounded-3xl p-6 md:p-8 shadow-xl shadow-amber-100 border border-amber-50">
+            <div class="space-y-6">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <i data-lucide="message-square" class="text-amber-500"></i> 이웃들의 한마디 (방명록)
+                    </h2>
+                    <p class="text-xs text-slate-400"><span class="dog-name-dynamic">김세일</span>의 이모 삼촌들, 예쁜 발자국을 남기고 가세요!</p>
+                </div>
+
+                <!-- 방명록 작성 -->
+                <form id="guestbook-form" class="flex flex-col sm:flex-row gap-3">
+                    <input type="text" id="gb-author" placeholder="작성자 이름" class="sm:w-1/4 px-4 py-3 text-sm rounded-2xl border border-slate-200 focus:ring-2 focus:ring-amber-400 focus:outline-none" required>
+                    <input type="text" id="gb-text" placeholder="세일이에게 사랑스러운 한마디를 남겨주세요!" class="flex-1 px-4 py-3 text-sm rounded-2xl border border-slate-200 focus:ring-2 focus:ring-amber-400 focus:outline-none" required>
+                    <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-white font-semibold px-6 py-3 rounded-2xl shadow-md transition flex items-center justify-center gap-1 whitespace-nowrap">
+                        <i data-lucide="send" class="w-4 h-4"></i> 남기기
+                    </button>
+                </form>
+
+                <!-- 메시지 흐름 목록 -->
+                <div id="guestbook-list" class="space-y-3 max-h-[400px] overflow-y-auto pr-1">
+                    <!-- 동적 주입 -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 이미지 확대 모달 -->
+    <div id="image-modal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+        <button id="btn-close-modal" class="absolute top-4 right-4 text-white hover:text-amber-400 transition bg-black/40 p-2 rounded-full">
+            <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+        <div class="max-w-3xl max-h-[85vh] overflow-hidden rounded-2xl relative shadow-2xl">
+            <img id="modal-img-display" src="" alt="확대 이미지" class="w-full h-auto max-h-[80vh] object-contain">
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="bg-slate-100 text-slate-400 text-xs text-center py-8 mt-16 border-t border-slate-200 space-y-2">
+        <p>© 2026 우리 집 <span class="dog-name-dynamic">김세일</span>의 미니홈피. All rights reserved.</p>
+        <p>세일이를 사랑하는 마음을 담아 안전하게 기록 중입니다 🐾</p>
+    </footer>
+
+    <!-- 자바스크립트 소스코드 -->
+    <script>
+        // --- 상태 관리 객체 (State) ---
+        const state = {
+            profile: {
+                name: '김세일',
+                breed: '코카스파니엘',
+                birth: '2022-03-10',
+                favorites: '원반 던지기, 신발 훔치기',
+                bio: '펄럭이는 귀가 너무 매력적인 우리 집 마스코트, 코카스파니엘 김세일입니다!',
+                imageUrl: 'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?auto=format&fit=crop&q=80&w=400'
+            },
+            stats: {
+                hunger: 60,
+                happy: 75
+            },
+            gallery: [
+                {
+                    id: 1,
+                    url: 'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?auto=format&fit=crop&q=80&w=500',
+                    caption: '미니홈피 대표 사진 촬영일 📸'
+                },
+                {
+                    id: 2,
+                    url: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&q=80&w=500',
+                    caption: '새 꼬까옷 장만 완료! 잘 어울리나요? 👕'
+                },
+                {
+                    id: 3,
+                    url: 'https://images.unsplash.com/photo-1534361960057-19889db9621e?auto=format&fit=crop&q=80&w=500',
+                    caption: '주인님 어서 던져주세요! 장난감 대기 중 🎾'
+                },
+                {
+                    id: 4,
+                    url: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&q=80&w=500',
+                    caption: '친구랑 같이 산책 나왔던 날 🐾'
+                }
+            ],
+            walks: [
+                {
+                    id: 1,
+                    date: '2026-06-18',
+                    duration: 40,
+                    notes: '동네 한바퀴 가볍게 돌고, 잔디밭에서 꼬리 살랑살랑 흔들며 친구들을 만났어요.'
+                }
+            ],
+            guestbook: [
+                {
+                    id: 1,
+                    author: '삼촌',
+                    text: '세일이 오늘 미니홈피 오픈했네 축하해! 조만간 보러 갈 때 닭가슴살 간식 사갈게!',
+                    date: '2026.06.19'
+                },
+                {
+                    id: 2,
+                    author: '옆집 뽀삐네',
+                    text: '세일이 프로필 사진 푸들푸들하고 너무 귀여운 거 아닌가요?! 산책로에서 마주치면 비스킷 교환해요!!',
+                    date: '2026.06.19'
+                }
+            ]
+        };
+
+        // --- 요소 선택자 ---
+        const el = {
+            navDogName: document.getElementById('nav-dog-name'),
+            displayName: document.getElementById('display-name'),
+            displayBreed: document.getElementById('display-breed'),
+            displayBio: document.getElementById('display-bio'),
+            displayBirth: document.getElementById('display-birth'),
+            displayAge: document.getElementById('display-age'),
+            displayFavorites: document.getElementById('display-favorites'),
+            dogImg: document.getElementById('dog-img'),
+            dynamicNames: document.querySelectorAll('.dog-name-dynamic'),
+
+            // 편집 폼 컨트롤
+            btnEditProfile: document.getElementById('btn-edit-profile'),
+            profileEditForm: document.getElementById('profile-edit-form'),
+            btnCancelProfile: document.getElementById('btn-cancel-profile'),
+            btnSaveProfile: document.getElementById('btn-save-profile'),
+            inputName: document.getElementById('input-name'),
+            inputBreed: document.getElementById('input-breed'),
+            inputBirth: document.getElementById('input-birth'),
+            inputFavorites: document.getElementById('input-favorites'),
+            inputBio: document.getElementById('input-bio'),
+            imgUploader: document.getElementById('img-uploader'),
+
+            // 포토 갤러리 영역
+            galleryGrid: document.getElementById('gallery-grid'),
+            galleryUploader: document.getElementById('gallery-uploader'),
+            imageModal: document.getElementById('image-modal'),
+            modalImgDisplay: document.getElementById('modal-img-display'),
+            btnCloseModal: document.getElementById('btn-close-modal'),
+
+            // 인터랙션 구역
+            interactiveDogArea: document.getElementById('interactive-dog-area'),
+            dogCharacterSvg: document.getElementById('dog-character-svg'),
+            leftEar: document.getElementById('left-ear'),
+            rightEar: document.getElementById('right-ear'),
+            dogTongue: document.getElementById('dog-tongue'),
+            hungerBar: document.getElementById('hunger-bar'),
+            hungerPct: document.getElementById('hunger-pct'),
+            happyBar: document.getElementById('happy-bar'),
+            happyPct: document.getElementById('happy-pct'),
+            btnFeed: document.getElementById('btn-feed'),
+            btnPet: document.getElementById('btn-pet'),
+
+            // 산책 로그 구역
+            walkForm: document.getElementById('walk-form'),
+            walkDate: document.getElementById('walk-date'),
+            walkDuration: document.getElementById('walk-duration'),
+            walkNotes: document.getElementById('walk-notes'),
+            walkListContainer: document.getElementById('walk-list-container'),
+            totalWalkStats: document.getElementById('total-walk-stats'),
+
+            // 방명록 구역
+            guestbookForm: document.getElementById('guestbook-form'),
+            gbAuthor: document.getElementById('gb-author'),
+            gbText: document.getElementById('gb-text'),
+            guestbookList: document.getElementById('guestbook-list')
+        };
+
+        // --- 초기 로드 및 로컬스토리지 복구 ---
+        window.addEventListener('DOMContentLoaded', () => {
+            loadFromLocalStorage();
+            updateUI();
+            lucide.createIcons(); // 아이콘 렌더링
+            
+            // 오늘 날짜 기본 세팅
+            const today = new Date().toISOString().split('T')[0];
+            el.walkDate.value = today;
+            el.inputBirth.max = today;
+        });
+
+        // --- 로컬스토리지 유틸 ---
+        function saveToLocalStorage() {
+            localStorage.setItem('my_dog_homepage_state_seil', JSON.stringify(state));
+        }
+
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('my_dog_homepage_state_seil');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    Object.assign(state, parsed);
+                } catch (e) {
+                    console.error("로컬 스토리지 데이터 파싱 에러:", e);
+                }
+            }
+        }
+
+        // --- UI 전면 업데이트 ---
+        function updateUI() {
+            // 1. 프로필 정보 반영
+            el.navDogName.textContent = state.profile.name;
+            el.displayName.textContent = state.profile.name;
+            el.displayBreed.textContent = state.profile.breed;
+            el.displayBio.textContent = `"${state.profile.bio}"`;
+            el.displayBirth.textContent = state.profile.birth;
+            el.displayFavorites.textContent = state.profile.favorites;
+            el.dogImg.src = state.profile.imageUrl;
+
+            // 다이내믹 네임들 변경
+            el.dynamicNames.forEach(node => {
+                node.textContent = state.profile.name;
+            });
+
+            // 나이 계산 로직 적용
+            calculateAge(state.profile.birth);
+
+            // 2. 가상 펫 상태 게이지 반영
+            el.hungerPct.textContent = `${state.stats.hunger}%`;
+            el.hungerBar.style.width = `${state.stats.hunger}%`;
+            el.happyPct.textContent = `${state.stats.happy}%`;
+            el.happyBar.style.width = `${state.stats.happy}%`;
+
+            // 3. 갤러리 렌더링
+            renderGalleryGrid();
+
+            // 4. 산책 리스트 업데이트
+            renderWalkList();
+
+            // 5. 방명록 목록 업데이트
+            renderGuestbookList();
+        }
+
+        // --- 세부 기능: 나이 계산기 ---
+        function calculateAge(birthDateString) {
+            if (!birthDateString) return;
+            const birth = new Date(birthDateString);
+            const now = new Date();
+            
+            let ageInYears = now.getFullYear() - birth.getFullYear();
+            const monthDiff = now.getMonth() - birth.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birth.getDate())) {
+                ageInYears--;
+            }
+            if (ageInYears < 0) ageInYears = 0;
+
+            // 사람 나이 환산
+            let humanAge = 0;
+            if (ageInYears === 0) {
+                const diffTime = Math.abs(now - birth);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                const months = Math.floor(diffDays / 30);
+                el.displayAge.textContent = `${months > 0 ? months + '개월' : '신생아 강아지'} (사람 나이 약 2~5세)`;
+                return;
+            } else if (ageInYears === 1) {
+                humanAge = 15;
+            } else if (ageInYears === 2) {
+                humanAge = 24;
+            } else {
+                humanAge = 24 + (ageInYears - 2) * 4; // 코카스파니엘 중소형견 범주 계산
+            }
+
+            el.displayAge.textContent = `만 ${ageInYears}세 (사람나이 ${humanAge}세)`;
+        }
+
+        // --- 프로필 수정 컨트롤러 ---
+        el.btnEditProfile.addEventListener('click', () => {
+            el.profileEditForm.classList.remove('hidden');
+            el.inputName.value = state.profile.name;
+            el.inputBreed.value = state.profile.breed;
+            el.inputBirth.value = state.profile.birth;
+            el.inputFavorites.value = state.profile.favorites;
+            el.inputBio.value = state.profile.bio;
+        });
+
+        el.btnCancelProfile.addEventListener('click', () => {
+            el.profileEditForm.classList.add('hidden');
+        });
+
+        el.btnSaveProfile.addEventListener('click', () => {
+            state.profile.name = el.inputName.value.trim() || '김세일';
+            state.profile.breed = el.inputBreed.value.trim() || '코카스파니엘';
+            state.profile.birth = el.inputBirth.value || '2022-03-10';
+            state.profile.favorites = el.inputFavorites.value.trim() || '장난감';
+            state.profile.bio = el.inputBio.value.trim() || '소개말을 작성해 주세요.';
+
+            saveToLocalStorage();
+            updateUI();
+            el.profileEditForm.classList.add('hidden');
+        });
+
+        el.imgUploader.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                state.profile.imageUrl = evt.target.result;
+                saveToLocalStorage();
+                updateUI();
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // --- 포토 갤러리 기능 관리 ---
+        function renderGalleryGrid() {
+            if (state.gallery.length === 0) {
+                el.galleryGrid.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-slate-400">
+                        <i data-lucide="image-off" class="w-12 h-12 mx-auto opacity-30 mb-2"></i>
+                        <p class="text-sm">아직 공유한 사진이 없습니다. 첫번째 일상을 공유해보세요!</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            el.galleryGrid.innerHTML = state.gallery.map(item => `
+                <div class="group relative bg-slate-50 rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-md transition duration-300">
+                    <div class="aspect-square w-full overflow-hidden bg-slate-200 cursor-pointer" onclick="openImageModal('${item.url}')">
+                        <img src="${item.url}" alt="${item.caption || '갤러리 이미지'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </div>
+                    <div class="p-3">
+                        <p class="text-xs text-slate-600 line-clamp-1">${item.caption || '사랑스러운 세일이의 순간'}</p>
+                    </div>
+                    <button onclick="deleteGalleryItem(${item.id})" class="absolute top-2 right-2 bg-black/60 hover:bg-rose-600 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition duration-200" title="사진 삭제">
+                        <i data-lucide="trash" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        // 갤러리 새 사진 등록 처리
+        el.galleryUploader.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // 캡션 입력 처리
+            const caption = prompt("세일이의 사진 설명(캡션)을 입력해 주세요! :", "세일이의 기분 좋은 하루 🧡");
+            
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const newItem = {
+                    id: Date.now(),
+                    url: evt.target.result,
+                    caption: caption ? caption.trim() : '세일이의 소중한 순간'
+                };
+                
+                state.gallery.unshift(newItem);
+                state.stats.happy = Math.min(100, state.stats.happy + 10);
+                
+                saveToLocalStorage();
+                updateUI();
+            };
+            reader.readAsDataURL(file);
+            el.galleryUploader.value = ''; // 초기화
+        });
+
+        // 갤러리 사진 삭제
+        window.deleteGalleryItem = function(id) {
+            if (confirm("정말 이 사진을 갤러리에서 삭제하시겠습니까?")) {
+                state.gallery = state.gallery.filter(item => item.id !== id);
+                saveToLocalStorage();
+                updateUI();
+            }
+        };
+
+        // 이미지 모달 팝업 제어
+        window.openImageModal = function(url) {
+            el.modalImgDisplay.src = url;
+            el.imageModal.classList.remove('hidden');
+        };
+
+        el.btnCloseModal.addEventListener('click', () => {
+            el.imageModal.classList.add('hidden');
+        });
+
+        // --- 상호작용 (다마고치식 피딩 / 애니메이션) ---
+        function createEffect(x, y, charEmoji) {
+            const effectEl = document.createElement('span');
+            effectEl.textContent = charEmoji;
+            effectEl.className = 'bubble-effect text-3xl z-40 select-none';
+            effectEl.style.left = `${x}px`;
+            effectEl.style.top = `${y}px`;
+            
+            document.body.appendChild(effectEl);
+
+            setTimeout(() => {
+                effectEl.remove();
+            }, 1000);
+        }
+
+        el.interactiveDogArea.addEventListener('click', (e) => {
+            const rect = el.interactiveDogArea.getBoundingClientRect();
+            const x = e.clientX;
+            const y = e.clientY;
+            triggerPet(x, y);
+        });
+
+        el.btnPet.addEventListener('click', (e) => {
+            const rect = el.interactiveDogArea.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 3;
+            triggerPet(x, y);
+        });
+
+        el.btnFeed.addEventListener('click', (e) => {
+            const rect = el.interactiveDogArea.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + (rect.height / 3) * 2;
+            triggerFeed(x, y);
+        });
+
+        function wiggleEars() {
+            el.leftEar.style.transform = 'rotate(-15deg)';
+            el.rightEar.style.transform = 'rotate(15deg)';
+            setTimeout(() => {
+                el.leftEar.style.transform = 'rotate(0deg)';
+                el.rightEar.style.transform = 'rotate(0deg)';
+            }, 500);
+        }
+
+        function triggerPet(screenX, screenY) {
+            state.stats.happy = Math.min(100, state.stats.happy + 10);
+            saveToLocalStorage();
+            updateUI();
+
+            createEffect(screenX - 15, screenY - 30, '💖');
+            wiggleEars();
+
+            el.dogCharacterSvg.style.transform = 'translateY(10px) scale(0.95)';
+            setTimeout(() => {
+                el.dogCharacterSvg.style.transform = 'translateY(0) scale(1.05)';
+                setTimeout(() => { el.dogCharacterSvg.style.transform = 'none'; }, 150);
+            }, 150);
+        }
+
+        function triggerFeed(screenX, screenY) {
+            state.stats.hunger = Math.min(100, state.stats.hunger + 15);
+            state.stats.happy = Math.min(100, state.stats.happy + 5);
+            saveToLocalStorage();
+            updateUI();
+
+            el.dogTongue.style.transform = 'scaleY(1)';
+            setTimeout(() => {
+                el.dogTongue.style.transform = 'scaleY(0)';
+            }, 1000);
+
+            createEffect(screenX - 15, screenY - 30, '🍖');
+            wiggleEars();
+
+            el.dogCharacterSvg.style.transform = 'translateY(-15px) rotate(3deg)';
+            setTimeout(() => {
+                el.dogCharacterSvg.style.transform = 'translateY(0) rotate(-3deg)';
+                setTimeout(() => { el.dogCharacterSvg.style.transform = 'none'; }, 150);
+            }, 200);
+        }
+
+        // --- 산책 트래커 기능 ---
+        el.walkForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const date = el.walkDate.value;
+            const duration = parseInt(el.walkDuration.value, 10);
+            const notes = el.walkNotes.value.trim();
+
+            if (!date || isNaN(duration) || !notes) return;
+
+            const newWalk = {
+                id: Date.now(),
+                date,
+                duration,
+                notes
+            };
+
+            state.walks.unshift(newWalk);
+            state.stats.happy = Math.min(100, state.stats.happy + 20);
+
+            saveToLocalStorage();
+            updateUI();
+
+            el.walkDuration.value = '';
+            el.walkNotes.value = '';
+            
+            const today = new Date().toISOString().split('T')[0];
+            el.walkDate.value = today;
+        });
+
+        window.deleteWalk = function(id) {
+            state.walks = state.walks.filter(w => w.id !== id);
+            saveToLocalStorage();
+            updateUI();
+        }
+
+        function renderWalkList() {
+            el.totalWalkStats.textContent = `총 ${state.walks.length}회 산책 완료`;
+
+            if (state.walks.length === 0) {
+                el.walkListContainer.innerHTML = `
+                    <div class="text-center py-12 text-slate-400">
+                        <i data-lucide="footprints" class="w-12 h-12 mx-auto opacity-30 mb-2"></i>
+                        <p class="text-sm">아직 등록된 산책 기록이 없어요.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            const sortedWalks = [...state.walks].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            el.walkListContainer.innerHTML = sortedWalks.map(w => `
+                <div class="bg-emerald-50/40 p-4 rounded-2xl border border-emerald-100 flex items-start justify-between gap-4 transition hover:bg-emerald-50">
+                    <div class="flex gap-3 items-start">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                            <i data-lucide="leaf" class="w-5 h-5"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-emerald-700 bg-emerald-100/50 px-2.5 py-0.5 rounded-full font-bold">
+                                    ⏱️ ${w.duration}분 산책
+                                </span>
+                                <span class="text-[11px] text-slate-400 font-medium">${w.date}</span>
+                            </div>
+                            <p class="text-sm text-slate-600 font-medium break-all whitespace-pre-line">${w.notes}</p>
+                        </div>
+                    </div>
+                    <button onclick="deleteWalk(${w.id})" class="text-slate-300 hover:text-rose-500 transition p-1" title="삭제">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        // --- 방명록 기능 ---
+        el.guestbookForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const author = el.gbAuthor.value.trim();
+            const text = el.gbText.value.trim();
+
+            if (!author || !text) return;
+
+            const now = new Date();
+            const dateString = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
+
+            const newMsg = {
+                id: Date.now(),
+                author,
+                text,
+                date: dateString
+            };
+
+            state.guestbook.unshift(newMsg);
+            saveToLocalStorage();
+            updateUI();
+
+            el.gbAuthor.value = '';
+            el.gbText.value = '';
+        });
+
+        window.deleteGuestbook = function(id) {
+            state.guestbook = state.guestbook.filter(g => g.id !== id);
+            saveToLocalStorage();
+            updateUI();
+        }
+
+        function renderGuestbookList() {
+            if (state.guestbook.length === 0) {
+                el.guestbookList.innerHTML = `
+                    <div class="text-center py-8 text-slate-400">
+                        <p class="text-sm">아직 방명록 글이 없습니다. 첫 글을 남겨주세요!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            el.guestbookList.innerHTML = state.guestbook.map(g => {
+                const initial = g.author ? g.author.charAt(0) : '🐾';
+                return `
+                    <div class="bg-amber-50/20 p-4 rounded-2xl border border-amber-100/10 flex gap-4 items-start justify-between group">
+                        <div class="flex gap-4 items-start">
+                            <div class="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center font-bold text-amber-700 shrink-0 text-sm">
+                                ${initial}
+                            </div>
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-sm text-slate-700">${g.author}</span>
+                                    <span class="text-[10px] text-slate-400">${g.date}</span>
+                                </div>
+                                <p class="text-sm text-slate-600 break-all">${g.text}</p>
+                            </div>
+                        </div>
+                        <button onclick="deleteGuestbook(${g.id})" class="text-slate-300 hover:text-rose-500 transition opacity-0 group-hover:opacity-100 p-1" title="삭제">
+                            <i data-lucide="x" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
+
+```
